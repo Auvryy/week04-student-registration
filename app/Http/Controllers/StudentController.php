@@ -49,6 +49,8 @@ class StudentController extends Controller
             $validated['profile_picture'] = $request->file('profile_picture')->store('profile_pictures', 'public');
         }
 
-        return $validated;
+        $student = Student::create($validated);
+
+        return redirect()->route('students.show', $student->id);
     }
 }
