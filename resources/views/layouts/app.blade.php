@@ -42,22 +42,22 @@
             font-family: 'JetBrains Mono', monospace;
         }
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
         .animate-fade-in {
-            animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation: fadeIn 0.25s ease-out forwards;
         }
         @keyframes modalPop {
-            0% { opacity: 0; transform: scale(0.95) translateY(12px); }
-            100% { opacity: 1; transform: scale(1) translateY(0); }
+            0% { opacity: 0; transform: scale(0.92); }
+            100% { opacity: 1; transform: scale(1); }
         }
         .animate-modal-pop {
-            animation: modalPop 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation: modalPop 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
     </style>
 </head>
-<body class="bg-stone-50/50 text-stone-800 antialiased min-h-screen flex flex-col justify-between selection:bg-orange-600 selection:text-white">
+<body class="bg-stone-50/50 text-stone-800 antialiased min-h-screen flex flex-col justify-between selection:bg-orange-600 selection:text-white relative">
 
     <!-- Top Accent Bar -->
     <div class="h-1 bg-gradient-to-r from-orange-500 via-amber-500 to-stone-900"></div>
@@ -93,78 +93,6 @@
 
     <!-- Main Content Area -->
     <main class="max-w-5xl mx-auto px-4 sm:px-6 py-8 flex-1 w-full animate-fade-in">
-        <!-- Submission Success Modal Feedback (Centered, Non-Scrollable Background) -->
-        @if(session('success'))
-            <div id="successModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-900/60 backdrop-blur-xs transition-opacity">
-                <div class="bg-white rounded-2xl border border-stone-200 shadow-2xl max-w-md w-full p-6 sm:p-7 text-center animate-modal-pop relative">
-                    <!-- Close button -->
-                    <button onclick="closeModal()" class="absolute top-4 right-4 text-stone-400 hover:text-stone-700 text-sm p-1 rounded-lg transition-colors">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
-
-                    <!-- Icon Badge -->
-                    <div class="w-14 h-14 rounded-2xl bg-orange-50 border border-orange-100 text-orange-600 flex items-center justify-center mx-auto mb-4 text-2xl shadow-2xs">
-                        <i class="fa-solid fa-circle-check text-2xl"></i>
-                    </div>
-
-                    <!-- Heading & Content -->
-                    <h3 class="text-lg font-bold text-stone-900">Registration Complete</h3>
-                    <p class="text-xs text-stone-600 mt-1.5 leading-relaxed">
-                        {{ session('success') }}
-                    </p>
-
-                    @if(session('registered_student_name'))
-                        <div class="mt-4 p-3 bg-stone-50 border border-stone-100 rounded-xl text-xs text-left space-y-1">
-                            <div class="font-bold text-stone-900 text-sm">{{ session('registered_student_name') }}</div>
-                            <div class="text-stone-500">{{ session('registered_student_program') }}</div>
-                        </div>
-                    @endif
-
-                    <!-- Modal Actions -->
-                    <div class="mt-6 flex flex-col sm:flex-row gap-2.5">
-                        @if(session('registered_student_id'))
-                            <a href="{{ route('students.show', session('registered_student_id')) }}" class="flex-1 px-4 py-2.5 bg-stone-900 text-white rounded-xl text-xs font-bold hover:bg-stone-800 transition-colors flex items-center justify-center space-x-1.5">
-                                <i class="fa-regular fa-user text-[11px]"></i>
-                                <span>View Profile</span>
-                            </a>
-                        @endif
-                        <button onclick="closeModal()" class="flex-1 px-4 py-2.5 bg-orange-600 text-white rounded-xl text-xs font-bold hover:bg-orange-700 transition-colors flex items-center justify-center space-x-1.5">
-                            <i class="fa-solid fa-plus text-[10px]"></i>
-                            <span>Register Another</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <script>
-                // Disable scrolling on body while modal is open
-                document.body.classList.add('overflow-hidden');
-
-                function closeModal() {
-                    const modal = document.getElementById('successModal');
-                    if (modal) {
-                        modal.classList.add('opacity-0', 'pointer-events-none');
-                        document.body.classList.remove('overflow-hidden');
-                        setTimeout(() => modal.remove(), 200);
-                    }
-                }
-
-                // Close modal if user clicks outside the modal card
-                document.getElementById('successModal')?.addEventListener('click', function(e) {
-                    if (e.target === this) {
-                        closeModal();
-                    }
-                });
-
-                // Close on Escape key press
-                document.addEventListener('keydown', function(e) {
-                    if (e.key === 'Escape') {
-                        closeModal();
-                    }
-                });
-            </script>
-        @endif
-
         @yield('content')
     </main>
 
@@ -179,6 +107,80 @@
             <div>Mini Project 03: Student Registration System (CCS)</div>
         </div>
     </footer>
+
+    <!-- Submission Success Modal (Direct Child of Body, Fixed Viewport Center) -->
+    @if(session('success'))
+        <div id="successModal" class="fixed inset-0 z-[9999] w-screen h-screen flex items-center justify-center p-4 bg-stone-900/60 backdrop-blur-xs transition-opacity">
+            <div class="bg-white rounded-2xl border border-stone-200 shadow-2xl max-w-md w-full p-6 sm:p-7 text-center animate-modal-pop relative m-auto">
+                <!-- Close button -->
+                <button onclick="closeModal()" class="absolute top-4 right-4 text-stone-400 hover:text-stone-700 text-sm p-1 rounded-lg transition-colors" title="Close modal">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+
+                <!-- Icon Badge -->
+                <div class="w-14 h-14 rounded-2xl bg-orange-50 border border-orange-100 text-orange-600 flex items-center justify-center mx-auto mb-4 text-2xl shadow-2xs">
+                    <i class="fa-solid fa-circle-check text-2xl"></i>
+                </div>
+
+                <!-- Heading & Content -->
+                <h3 class="text-lg font-bold text-stone-900">Registration Complete</h3>
+                <p class="text-xs text-stone-600 mt-1.5 leading-relaxed">
+                    {{ session('success') }}
+                </p>
+
+                @if(session('registered_student_name'))
+                    <div class="mt-4 p-3 bg-stone-50 border border-stone-100 rounded-xl text-xs text-left space-y-1">
+                        <div class="font-bold text-stone-900 text-sm">{{ session('registered_student_name') }}</div>
+                        <div class="text-stone-500">{{ session('registered_student_program') }}</div>
+                    </div>
+                @endif
+
+                <!-- Modal Actions -->
+                <div class="mt-6 flex flex-col sm:flex-row gap-2.5">
+                    @if(session('registered_student_id'))
+                        <a href="{{ route('students.show', session('registered_student_id')) }}" class="flex-1 px-4 py-2.5 bg-stone-900 text-white rounded-xl text-xs font-bold hover:bg-stone-800 transition-colors flex items-center justify-center space-x-1.5">
+                            <i class="fa-regular fa-user text-[11px]"></i>
+                            <span>View Profile</span>
+                        </a>
+                    @endif
+                    <button onclick="closeModal()" class="flex-1 px-4 py-2.5 bg-orange-600 text-white rounded-xl text-xs font-bold hover:bg-orange-700 transition-colors flex items-center justify-center space-x-1.5">
+                        <i class="fa-solid fa-plus text-[10px]"></i>
+                        <span>Register Another</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // Lock scrolling on document while modal is open
+            document.documentElement.classList.add('overflow-hidden');
+            document.body.classList.add('overflow-hidden');
+
+            function closeModal() {
+                const modal = document.getElementById('successModal');
+                if (modal) {
+                    modal.classList.add('opacity-0', 'pointer-events-none');
+                    document.documentElement.classList.remove('overflow-hidden');
+                    document.body.classList.remove('overflow-hidden');
+                    setTimeout(() => modal.remove(), 200);
+                }
+            }
+
+            // Close modal when clicking on the backdrop
+            document.getElementById('successModal')?.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeModal();
+                }
+            });
+
+            // Close on Escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closeModal();
+                }
+            });
+        </script>
+    @endif
 
     @stack('scripts')
 </body>
