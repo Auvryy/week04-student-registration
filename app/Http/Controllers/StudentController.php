@@ -51,6 +51,17 @@ class StudentController extends Controller
 
         $student = Student::create($validated);
 
-        return redirect()->route('students.show', $student->id);
+        return redirect()
+            ->route('students.show', $student->id)
+            ->with('success', 'Student registered successfully!');
+    }
+
+    /**
+     * Display the specified registered student.
+     */
+    public function show(string|int $id): View
+    {
+        $student = Student::findOrFail($id);
+        return view('students.show', compact('student'));
     }
 }
