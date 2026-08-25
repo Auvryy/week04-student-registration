@@ -49,7 +49,7 @@
             animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
         @keyframes modalPop {
-            0% { opacity: 0; transform: scale(0.95) translateY(10px); }
+            0% { opacity: 0; transform: scale(0.95) translateY(12px); }
             100% { opacity: 1; transform: scale(1) translateY(0); }
         }
         .animate-modal-pop {
@@ -93,65 +93,72 @@
 
     <!-- Main Content Area -->
     <main class="max-w-5xl mx-auto px-4 sm:px-6 py-8 flex-1 w-full animate-fade-in">
-        <!-- Top Success Banner (Secondary feedback) -->
+        <!-- Submission Success Modal Feedback (Centered, Non-Scrollable Background) -->
         @if(session('success'))
-            <div id="flash-banner" class="mb-6 p-4 border border-emerald-200 bg-emerald-50 text-emerald-900 rounded-xl text-sm flex items-center justify-between shadow-xs transition-all">
-                <div class="flex items-center space-x-3">
-                    <div class="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center flex-shrink-0">
-                        <i class="fa-solid fa-circle-check text-sm"></i>
-                    </div>
-                    <div>
-                        <p class="font-bold text-emerald-950 text-xs sm:text-sm">Success</p>
-                        <p class="text-xs text-emerald-800">{{ session('success') }}</p>
-                    </div>
-                </div>
-                <button onclick="document.getElementById('flash-banner').remove()" class="text-emerald-600 hover:text-emerald-900 text-xs px-2 py-1 rounded">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-
-            <!-- Submission Success Modal Feedback -->
-            <div id="successModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-900/50 backdrop-blur-xs transition-opacity">
-                <div class="bg-white rounded-2xl border border-stone-200 shadow-2xl max-w-md w-full p-6 text-center animate-modal-pop relative">
+            <div id="successModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-900/60 backdrop-blur-xs transition-opacity">
+                <div class="bg-white rounded-2xl border border-stone-200 shadow-2xl max-w-md w-full p-6 sm:p-7 text-center animate-modal-pop relative">
                     <!-- Close button -->
                     <button onclick="closeModal()" class="absolute top-4 right-4 text-stone-400 hover:text-stone-700 text-sm p-1 rounded-lg transition-colors">
                         <i class="fa-solid fa-xmark"></i>
                     </button>
 
-                    <!-- Icon -->
+                    <!-- Icon Badge -->
                     <div class="w-14 h-14 rounded-2xl bg-orange-50 border border-orange-100 text-orange-600 flex items-center justify-center mx-auto mb-4 text-2xl shadow-2xs">
-                        <i class="fa-solid fa-check"></i>
+                        <i class="fa-solid fa-circle-check text-2xl"></i>
                     </div>
 
                     <!-- Heading & Content -->
                     <h3 class="text-lg font-bold text-stone-900">Registration Complete</h3>
-                    <p class="text-xs text-stone-600 mt-2 leading-relaxed">
-                        {{ session('success') }} The student information and profile image have been securely recorded in the database.
+                    <p class="text-xs text-stone-600 mt-1.5 leading-relaxed">
+                        {{ session('success') }}
                     </p>
+
+                    @if(session('registered_student_name'))
+                        <div class="mt-4 p-3 bg-stone-50 border border-stone-100 rounded-xl text-xs text-left space-y-1">
+                            <div class="font-bold text-stone-900 text-sm">{{ session('registered_student_name') }}</div>
+                            <div class="text-stone-500">{{ session('registered_student_program') }}</div>
+                        </div>
+                    @endif
 
                     <!-- Modal Actions -->
                     <div class="mt-6 flex flex-col sm:flex-row gap-2.5">
-                        <button onclick="closeModal()" class="flex-1 px-4 py-2.5 bg-stone-900 text-white rounded-xl text-xs font-bold hover:bg-stone-800 transition-colors">
-                            View Profile Details
-                        </button>
-                        <a href="{{ route('students.create') }}" class="flex-1 px-4 py-2.5 bg-orange-600 text-white rounded-xl text-xs font-bold hover:bg-orange-700 transition-colors flex items-center justify-center space-x-1">
+                        @if(session('registered_student_id'))
+                            <a href="{{ route('students.show', session('registered_student_id')) }}" class="flex-1 px-4 py-2.5 bg-stone-900 text-white rounded-xl text-xs font-bold hover:bg-stone-800 transition-colors flex items-center justify-center space-x-1.5">
+                                <i class="fa-regular fa-user text-[11px]"></i>
+                                <span>View Profile</span>
+                            </a>
+                        @endif
+                        <button onclick="closeModal()" class="flex-1 px-4 py-2.5 bg-orange-600 text-white rounded-xl text-xs font-bold hover:bg-orange-700 transition-colors flex items-center justify-center space-x-1.5">
+                            <i class="fa-solid fa-plus text-[10px]"></i>
                             <span>Register Another</span>
-                        </a>
+                        </button>
                     </div>
                 </div>
             </div>
 
             <script>
+                // Disable scrolling on body while modal is open
+                document.body.classList.add('overflow-hidden');
+
                 function closeModal() {
                     const modal = document.getElementById('successModal');
                     if (modal) {
                         modal.classList.add('opacity-0', 'pointer-events-none');
+                        document.body.classList.remove('overflow-hidden');
                         setTimeout(() => modal.remove(), 200);
                     }
                 }
-                // Close modal if user clicks on backdrop outside the card
+
+                // Close modal if user clicks outside the modal card
                 document.getElementById('successModal')?.addEventListener('click', function(e) {
                     if (e.target === this) {
+                        closeModal();
+                    }
+                });
+
+                // Close on Escape key press
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape') {
                         closeModal();
                     }
                 });

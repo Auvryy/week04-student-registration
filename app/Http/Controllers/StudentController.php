@@ -64,8 +64,11 @@ class StudentController extends Controller
         $student = Student::create($validated);
 
         return redirect()
-            ->route('students.show', $student->id)
-            ->with('success', 'Student registered successfully!');
+            ->route('students.create')
+            ->with('success', 'Student registered successfully!')
+            ->with('registered_student_id', $student->id)
+            ->with('registered_student_name', $student->full_name)
+            ->with('registered_student_program', $student->program);
     }
 
     /**

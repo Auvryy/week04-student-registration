@@ -69,7 +69,7 @@ class StudentRegistrationTest extends TestCase
         $this->assertNotNull($student);
         Storage::disk('public')->assertExists($student->profile_picture);
 
-        $response->assertRedirect(route('students.show', $student->id));
+        $response->assertRedirect(route('students.create'));
         $response->assertSessionHas('success', 'Student registered successfully!');
     }
 }
