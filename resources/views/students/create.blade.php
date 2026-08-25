@@ -42,17 +42,12 @@
                         <label for="student_id" class="block text-xs font-semibold text-slate-700 mb-1.5">
                             Student ID Number <span class="text-rose-500 font-bold">*</span>
                         </label>
-                        <div class="relative">
-                            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                                <i class="fa-solid fa-barcode text-xs"></i>
-                            </div>
-                            <input type="text"
-                                   name="student_id"
-                                   id="student_id"
-                                   value="{{ old('student_id') }}"
-                                   placeholder="e.g. 2026-IT-0101"
-                                   class="w-full pl-9 pr-3.5 py-2.5 border {{ $errors->has('student_id') ? 'border-rose-400 bg-rose-50/20 ring-2 ring-rose-100' : 'border-slate-300 hover:border-slate-400 focus:border-indigo-600 focus:ring-3 focus:ring-indigo-500/10' }} rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none transition-all font-mono">
-                        </div>
+                        <input type="text"
+                               name="student_id"
+                               id="student_id"
+                               value="{{ old('student_id') }}"
+                               placeholder="e.g. 2026-IT-0101"
+                               class="w-full px-3.5 py-2.5 border {{ $errors->has('student_id') ? 'border-rose-400 bg-rose-50/20 ring-2 ring-rose-100' : 'border-slate-300 hover:border-slate-400 focus:border-indigo-600 focus:ring-3 focus:ring-indigo-500/10' }} rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none transition-all font-mono">
                         @error('student_id')
                             <p class="text-xs text-rose-600 mt-1.5 font-medium flex items-center space-x-1">
                                 <i class="fa-solid fa-circle-exclamation text-[10px]"></i>
