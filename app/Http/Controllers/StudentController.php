@@ -45,6 +45,10 @@ class StudentController extends Controller
             'profile_picture'=> 'required|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
+        if ($request->hasFile('profile_picture')) {
+            $validated['profile_picture'] = $request->file('profile_picture')->store('profile_pictures', 'public');
+        }
+
         return $validated;
     }
 }
