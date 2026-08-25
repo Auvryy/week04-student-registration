@@ -72,4 +72,27 @@ class StudentRegistrationTest extends TestCase
         $response->assertRedirect(route('students.create'));
         $response->assertSessionHas('success', 'Student registered successfully!');
     }
+
+    public function test_student_can_be_deleted(): void
+    {
+        $student = Student::create([
+            'student_id'      => '2026-IT-1234',
+            'first_name'      => 'Test',
+            'last_name'       => 'User',
+            'email'           => 'test.user@example.com',
+            'mobile_number'   => '09123456789',
+            'gender'          => 'Other',
+            'date_of_birth'   => '2004-01-01',
+            'program'         => 'BS Information Technology',
+            'year_level'      => '1st Year',
+            'address'         => 'Sample Address',
+            'profile_picture' => 'profile_pictures/sample.png',
+        ]);
+
+        $response = $this->delete(route('students.destroy', $student->id));
+        $response->assertRedirect(route('students.index'));
+        $this->assertDatabaseMissing('students', [
+            'id' => $student->id,
+        ]);
+    }
 }

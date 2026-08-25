@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Student;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class StudentController extends Controller
@@ -78,5 +80,36 @@ class StudentController extends Controller
     {
         $student = Student::findOrFail($id);
         return view('students.show', compact('student'));
+    }
+
+    /**
+     * Remove the specified student from the database.
+     */
+    public function destroy(string|int $id)
+    {
+        $student = Student::findOrFail($id);
+
+        // Delete photo if it is a user-uploaded file
+        if ($student->profile_picture && !str_starts_with($student->profile_picture, 'profile_pictures/student')) {
+            Storage::disk('public')->delete($student->profile_picture);
+        }
+
+        $student->delete();
+
+        return redirect()
+            ->route('students.index')
+            ->with('success', 'Student account has been removed successfully.');
+    }
+
+    /**
+     * Reset the database to default seeded student records.
+     */
+    public function resetDatabase()
+    {
+        Artisan::call('migrate:fresh', ['--seed' => true, '--force' => true]);
+
+        return redirect()
+            ->route('students.index')
+            ->with('success', 'Database has been reset to default sample records.');
     }
 }

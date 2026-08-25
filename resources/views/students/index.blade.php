@@ -14,7 +14,14 @@
             <h1 class="text-2xl font-bold text-stone-900 tracking-tight">Student Directory</h1>
             <p class="text-xs sm:text-sm text-stone-500 mt-0.5">Manage and inspect all verified student registrations and uploaded profiles.</p>
         </div>
-        <div>
+        <div class="flex items-center space-x-2">
+            <form action="{{ route('students.reset-database') }}" method="POST" onsubmit="return confirm('Reset database to default sample records? Any newly registered students will be reloaded.');">
+                @csrf
+                <button type="submit" class="px-3.5 py-2.5 border border-stone-200 bg-white hover:bg-stone-50 text-stone-600 hover:text-stone-900 text-xs font-semibold rounded-xl transition-all shadow-2xs inline-flex items-center space-x-1.5">
+                    <i class="fa-solid fa-rotate-left text-[10px] text-stone-400"></i>
+                    <span>Reset Defaults</span>
+                </button>
+            </form>
             <a href="{{ route('students.create') }}" class="px-4 py-2.5 bg-orange-600 text-white text-xs font-bold rounded-xl hover:bg-orange-700 active:scale-95 transition-all shadow-xs hover:shadow inline-flex items-center space-x-1.5">
                 <i class="fa-solid fa-plus text-[10px]"></i>
                 <span>Register Student</span>
@@ -98,10 +105,19 @@
                                 </td>
                                 <td class="py-3.5 px-4 text-stone-500 font-mono text-[11px]">{{ $student->created_at->format('M d, Y') }}</td>
                                 <td class="py-3.5 px-4 text-right">
-                                    <a href="{{ route('students.show', $student->id) }}" class="px-3 py-1.5 bg-stone-100 text-stone-800 rounded-xl text-xs font-semibold hover:bg-orange-50 hover:text-orange-700 hover:border-orange-200 border border-transparent transition-all inline-flex items-center space-x-1">
-                                        <span>View</span>
-                                        <i class="fa-solid fa-chevron-right text-[9px]"></i>
-                                    </a>
+                                    <div class="flex items-center justify-end space-x-1.5">
+                                        <a href="{{ route('students.show', $student->id) }}" class="px-2.5 py-1.5 bg-stone-100 text-stone-800 rounded-lg text-xs font-semibold hover:bg-orange-50 hover:text-orange-700 hover:border-orange-200 border border-transparent transition-all inline-flex items-center space-x-1">
+                                            <span>View</span>
+                                            <i class="fa-solid fa-chevron-right text-[9px]"></i>
+                                        </a>
+                                        <form action="{{ route('students.destroy', $student->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete {{ $student->full_name }}?');" class="inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="px-2 py-1.5 text-stone-400 hover:text-rose-600 rounded-lg hover:bg-rose-50 transition-colors" title="Delete Student Record">
+                                                <i class="fa-regular fa-trash-can text-xs"></i>
+                                            </button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                         @endforeach
@@ -119,10 +135,18 @@
                 </div>
                 <p class="font-bold text-stone-800 text-sm mb-1">No student records found</p>
                 <p class="mb-4 text-stone-500">There are currently no students matching your query in the registry.</p>
-                <a href="{{ route('students.create') }}" class="px-4 py-2 bg-orange-600 text-white text-xs font-bold rounded-xl hover:bg-orange-700 active:scale-95 transition-all inline-flex items-center space-x-1.5 shadow-xs">
-                    <i class="fa-solid fa-plus text-[10px]"></i>
-                    <span>Register First Student</span>
-                </a>
+                <div class="flex items-center justify-center gap-2">
+                    <form action="{{ route('students.reset-database') }}" method="POST">
+                        @csrf
+                        <button type="submit" class="px-3.5 py-2 border border-stone-200 bg-white hover:bg-stone-50 text-stone-700 text-xs font-bold rounded-xl transition-all shadow-2xs">
+                            Load Default Students
+                        </button>
+                    </form>
+                    <a href="{{ route('students.create') }}" class="px-4 py-2 bg-orange-600 text-white text-xs font-bold rounded-xl hover:bg-orange-700 active:scale-95 transition-all inline-flex items-center space-x-1.5 shadow-xs">
+                        <i class="fa-solid fa-plus text-[10px]"></i>
+                        <span>Register First Student</span>
+                    </a>
+                </div>
             </div>
         @endif
     </div>

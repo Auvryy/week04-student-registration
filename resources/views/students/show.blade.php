@@ -5,7 +5,7 @@
 @section('content')
 <div class="max-w-3xl mx-auto space-y-6 animate-fade-in">
     <!-- Breadcrumb & Actions -->
-    <div class="flex items-center justify-between">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div class="flex items-center space-x-2 text-xs text-stone-500">
             <a href="{{ route('students.index') }}" class="hover:text-orange-600 font-semibold transition-colors flex items-center space-x-1">
                 <i class="fa-solid fa-users text-[10px]"></i>
@@ -22,6 +22,14 @@
                 <i class="fa-solid fa-plus text-[10px]"></i>
                 <span>Register Another</span>
             </a>
+            <form action="{{ route('students.destroy', $student->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this student record?');" class="inline">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="px-3 py-2 border border-rose-200 bg-rose-50 text-rose-700 hover:bg-rose-100 rounded-xl text-xs font-bold transition-colors inline-flex items-center space-x-1">
+                    <i class="fa-regular fa-trash-can text-xs"></i>
+                    <span>Delete</span>
+                </button>
+            </form>
         </div>
     </div>
 
