@@ -48,6 +48,13 @@
         .animate-fade-in {
             animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
+        @keyframes modalPop {
+            0% { opacity: 0; transform: scale(0.95) translateY(10px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .animate-modal-pop {
+            animation: modalPop 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
     </style>
 </head>
 <body class="bg-stone-50/50 text-stone-800 antialiased min-h-screen flex flex-col justify-between selection:bg-orange-600 selection:text-white">
@@ -86,7 +93,7 @@
 
     <!-- Main Content Area -->
     <main class="max-w-5xl mx-auto px-4 sm:px-6 py-8 flex-1 w-full animate-fade-in">
-        <!-- Flash Success Notification -->
+        <!-- Top Success Banner (Secondary feedback) -->
         @if(session('success'))
             <div id="flash-banner" class="mb-6 p-4 border border-emerald-200 bg-emerald-50 text-emerald-900 rounded-xl text-sm flex items-center justify-between shadow-xs transition-all">
                 <div class="flex items-center space-x-3">
@@ -102,6 +109,53 @@
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
+
+            <!-- Submission Success Modal Feedback -->
+            <div id="successModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-900/50 backdrop-blur-xs transition-opacity">
+                <div class="bg-white rounded-2xl border border-stone-200 shadow-2xl max-w-md w-full p-6 text-center animate-modal-pop relative">
+                    <!-- Close button -->
+                    <button onclick="closeModal()" class="absolute top-4 right-4 text-stone-400 hover:text-stone-700 text-sm p-1 rounded-lg transition-colors">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+
+                    <!-- Icon -->
+                    <div class="w-14 h-14 rounded-2xl bg-orange-50 border border-orange-100 text-orange-600 flex items-center justify-center mx-auto mb-4 text-2xl shadow-2xs">
+                        <i class="fa-solid fa-check"></i>
+                    </div>
+
+                    <!-- Heading & Content -->
+                    <h3 class="text-lg font-bold text-stone-900">Registration Complete</h3>
+                    <p class="text-xs text-stone-600 mt-2 leading-relaxed">
+                        {{ session('success') }} The student information and profile image have been securely recorded in the database.
+                    </p>
+
+                    <!-- Modal Actions -->
+                    <div class="mt-6 flex flex-col sm:flex-row gap-2.5">
+                        <button onclick="closeModal()" class="flex-1 px-4 py-2.5 bg-stone-900 text-white rounded-xl text-xs font-bold hover:bg-stone-800 transition-colors">
+                            View Profile Details
+                        </button>
+                        <a href="{{ route('students.create') }}" class="flex-1 px-4 py-2.5 bg-orange-600 text-white rounded-xl text-xs font-bold hover:bg-orange-700 transition-colors flex items-center justify-center space-x-1">
+                            <span>Register Another</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+                function closeModal() {
+                    const modal = document.getElementById('successModal');
+                    if (modal) {
+                        modal.classList.add('opacity-0', 'pointer-events-none');
+                        setTimeout(() => modal.remove(), 200);
+                    }
+                }
+                // Close modal if user clicks on backdrop outside the card
+                document.getElementById('successModal')?.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        closeModal();
+                    }
+                });
+            </script>
         @endif
 
         @yield('content')

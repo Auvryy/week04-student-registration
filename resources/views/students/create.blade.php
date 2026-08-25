@@ -321,9 +321,9 @@
                 <a href="{{ route('students.index') }}" class="text-xs font-semibold text-stone-500 hover:text-stone-800 transition-colors">
                     Cancel
                 </a>
-                <button type="submit" class="px-6 py-2.5 bg-orange-600 text-white text-xs font-bold rounded-xl hover:bg-orange-700 active:scale-95 transition-all duration-150 shadow-xs hover:shadow flex items-center space-x-2">
-                    <span>Submit Registration</span>
-                    <i class="fa-solid fa-arrow-right text-[11px]"></i>
+                <button type="submit" id="submitBtn" class="px-6 py-2.5 bg-orange-600 text-white text-xs font-bold rounded-xl hover:bg-orange-700 active:scale-95 transition-all duration-150 shadow-xs hover:shadow flex items-center space-x-2">
+                    <span id="btnText">Submit Registration</span>
+                    <i id="btnIcon" class="fa-solid fa-arrow-right text-[11px]"></i>
                 </button>
             </div>
         </form>
@@ -335,6 +335,10 @@
     const fileInput = document.getElementById('profile_picture');
     const imagePreview = document.getElementById('image-preview');
     const previewPlaceholder = document.getElementById('preview-placeholder');
+    const studentForm = document.getElementById('studentForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const btnText = document.getElementById('btnText');
+    const btnIcon = document.getElementById('btnIcon');
 
     if (fileInput) {
         fileInput.addEventListener('change', function(event) {
@@ -348,6 +352,15 @@
                 }
                 reader.readAsDataURL(file);
             }
+        });
+    }
+
+    if (studentForm) {
+        studentForm.addEventListener('submit', function() {
+            submitBtn.disabled = true;
+            submitBtn.classList.add('opacity-80', 'cursor-not-allowed');
+            btnText.innerText = 'Submitting...';
+            btnIcon.className = 'fa-solid fa-circle-notch fa-spin text-[11px]';
         });
     }
 </script>
