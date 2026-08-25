@@ -10,7 +10,7 @@
 ---
 
 ## 1. Project Title
-Student Registration System with Laravel Forms, Validation, and File Upload
+Student Registration System with Laravel Forms, Validation, and File Upload (CCS Student Portal)
 
 ---
 
@@ -26,10 +26,10 @@ During this activity, the following objectives were accomplished:
 * Created HTML registration forms using Laravel Blade templates.
 * Processed form data using Laravel controllers and resource routing.
 * Added server-side validation rules to stop invalid submissions.
-* Added flash messages to notify users after successful registration.
+* Added flash messages and submission modal feedback to notify users after successful registration.
 * Handled file uploads and stored images in Laravel Storage with a public link.
 * Created a students table using Laravel database migrations.
-* Created feature tests to verify form submission and validation.
+* Created feature tests to verify form submission, validation, and deletion.
 * Maintained clean Git version control with meaningful commits.
 
 ---
@@ -37,18 +37,20 @@ During this activity, the following objectives were accomplished:
 ## 4. Laravel Request Lifecycle
 When a user registers a student, the request moves through several stages in Laravel before a response is sent back:
 
-1. Browser: The user fills out the form, picks an image, and clicks submit. This sends an HTTP POST request to /students.
-2. Routing: Laravel checks routes/web.php and matches the POST /students request to the store method in StudentController.
-3. Controller: StudentController takes the incoming request and starts the process.
+1. Browser: The user fills out the form, picks an image, and clicks submit. This sends an HTTP POST request to `/students`.
+2. Routing: Laravel checks `routes/web.php` and matches the POST `/students` request to the `store` method in `StudentController`.
+3. Controller: `StudentController` takes the incoming request and starts the process.
 4. Validation: The controller runs validation rules on all fields. If any field fails, Laravel stops and sends the user back to the form with error messages.
-5. Storage: If validation passes and a file is attached, Laravel saves the image to the storage/app/public/profile_pictures folder.
-6. Model: The Student model is used to create a new record with the validated text data and the image path.
-7. Database: Laravel inserts the new row into the students table in the database.
-8. Response: The controller sends a redirect to the student profile page with a success flash message.
+5. Storage: If validation passes and a file is attached, Laravel saves the image to the `storage/app/public/profile_pictures` folder.
+6. Model: The `Student` model is used to create a new record with the validated text data and the image path.
+7. Database: Laravel inserts the new row into the `students` table in the database.
+8. Response: The controller sends a redirect to the registration page with a success flash message and feedback modal.
 
 ### Request Lifecycle Diagram
 
-```
+![Laravel Request Lifecycle Diagram](screenshots/LRL-diagram.png)
+
+```text
 User (Browser)
       |
       v
@@ -69,10 +71,10 @@ with Errors     |
                Student Model (Eloquent)
                 |
                 v
-               MySQL Database Table
+               Database Table (students)
                 |
                 v
-               Redirect to Profile with Flash Message
+               Redirect with Success Flash & Modal
 ```
 
 ---
@@ -82,18 +84,18 @@ The following validation rules are used in the application:
 
 | Field | Rules | Why It Is Important |
 | :--- | :--- | :--- |
-| student_id | required, unique | Stops duplicate student ID numbers from being saved in the database. |
-| first_name | required, max:100 | Makes sure the student provides their first name and avoids extra long text. |
-| middle_name| nullable, max:100 | Allows students without a middle name to submit while limiting length. |
-| last_name | required, max:100 | Makes sure the student's family name is provided. |
-| email | required, email, unique | Checks that the email is valid and has not been used by another student. |
-| mobile_number | required, numeric | Makes sure only numbers are entered for contact numbers. |
-| gender | required | Makes sure a gender option is chosen. |
-| date_of_birth | required, date | Ensures a valid date is submitted. |
-| program | required | Makes sure the student selects an academic course. |
-| year_level | required | Makes sure the student picks their current year level. |
-| address | required | Collects home address information for student records. |
-| profile_picture | required, image, mimes:jpg,jpeg,png, max:2048 | Makes sure only safe images under 2MB are uploaded to the server. |
+| `student_id` | required, unique | Stops duplicate student ID numbers from being saved in the database. |
+| `first_name` | required, max:100 | Makes sure the student provides their first name and avoids extra long text. |
+| `middle_name`| nullable, max:100 | Allows students without a middle name to submit while limiting length. |
+| `last_name` | required, max:100 | Makes sure the student's family name is provided. |
+| `email` | required, email, unique | Checks that the email is valid and has not been used by another student. |
+| `mobile_number` | required, numeric | Makes sure only numbers are entered for contact numbers. |
+| `gender` | required | Makes sure a gender option is chosen. |
+| `date_of_birth` | required, date | Ensures a valid date is submitted. |
+| `program` | required | Makes sure the student selects an academic course. |
+| `year_level` | required | Makes sure the student picks their current year level. |
+| `address` | required | Collects home address information for student records. |
+| `profile_picture` | required, image, mimes:jpg,jpeg,png, max:2048 | Makes sure only safe images under 2MB are uploaded to the server. |
 
 ---
 
@@ -101,7 +103,9 @@ The following validation rules are used in the application:
 
 ### Entity Relationship Diagram (ERD)
 
-```
+![Entity Relationship Diagram](screenshots/ERD-diagram.png)
+
+```text
 +---------------------------------------------------------+
 |                        STUDENTS                         |
 +---------------------------------------------------------+
@@ -124,9 +128,9 @@ The following validation rules are used in the application:
 ```
 
 ### Table Structure
-* Table Name: students
-* Primary Key: id
-* Unique Keys: student_id, email
+* Table Name: `students`
+* Primary Key: `id`
+* Unique Keys: `student_id`, `email`
 * Engine: InnoDB (MySQL) / SQLite
 
 ---
@@ -134,7 +138,9 @@ The following validation rules are used in the application:
 ## 7. Flowchart
 The flowchart below shows what happens when someone registers:
 
-```
+![Registration Flowchart Diagram](screenshots/registration-diagram.png)
+
+```text
 [Start: User Opens Registration Page]
                  |
                  v
@@ -160,7 +166,7 @@ The flowchart below shows what happens when someone registers:
       |                v
       |          [Set Success Flash Message]
       |                |
-      +---------> [Redirect to Profile Page]
+      +---------> [Display Submission Modal]
                        |
                        v
                      [End]
@@ -170,21 +176,38 @@ The flowchart below shows what happens when someone registers:
 
 ## 8. Screenshots
 
--- Registration Form --
--- Validation Errors on Form Submission --
--- Successful Registration Submission --
--- Flash Message Notification Banner --
--- Uploaded Profile Picture Display --
--- Database Table Records --
--- Student Profile Details Page --
--- Project Directory Structure in Editor --
--- Public GitHub Repository --
+### 1. Registration Form
+![Registration Form](screenshots/registration-form.png)
+
+### 2. Validation Errors on Form Submission
+![Validation Errors](screenshots/validation-errors.png)
+
+### 3. Filled Up Registration Form
+![Filled Up Form](screenshots/filled-up.png)
+
+### 4. Successful Registration & Modal Feedback
+![Success Registration](screenshots/success-registration.png)
+
+### 5. Uploaded Profile Picture Display
+![Uploaded Profile Picture](screenshots/uploaded-profile.png)
+
+### 6. Database Table Records
+![Database Table Records](screenshots/sql-table.png)
+
+### 7. Student Profile Details Page
+![Student Profile](screenshots/student-1.png)
+
+### 8. Project Directory Structure in Code Editor
+![Code Editor Project Structure](screenshots/code-editor.png)
+
+### 9. Public GitHub Repository & Commit History
+![GitHub Repository Commits](screenshots/github-repo-commits.png)
 
 ---
 
 ## 9. Problems Encountered
-1. Profile pictures showed broken images after upload: When I first uploaded an image and went to the student profile page, the image was not loading. I found out that files stored in storage/app/public cannot be seen directly by the browser until a symbolic link is created.
-2. All form text disappeared when validation failed: When I submitted the form with one missing field, all other fields I already typed became empty. This was annoying because I had to type everything again.
+1. Profile pictures showed broken images after upload: When I first uploaded an image and went to the student profile page, the image was not loading. I found out that files stored in `storage/app/public` cannot be seen directly by the browser until a symbolic link is created.
+2. All form text disappeared when validation failed: When I submitted the form with one missing field, all other fields I already typed became empty. This was frustrating because I had to type everything again.
 3. Uploaded picture was not being saved: When submitting the form, the picture field was giving a required error even though I chose a file. This happened because the HTML form tag was missing the multipart attribute.
 
 ---
