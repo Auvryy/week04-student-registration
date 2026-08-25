@@ -13,7 +13,19 @@ class StudentController extends Controller
      */
     public function index(Request $request): View
     {
-        $students = Student::latest()->paginate(10);
+        $query = Student::query();
+
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function($q) use ($search) {
+                $q->where('student_id', 'like', "%{$search}%")
+                  ->orWhere('first_name', 'like', "%{$search}%")
+                  ->orWhere('last_name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%");
+            });
+        }
+
+        $students = $query->latest()->paginate(10)->withQueryString();
         return view('students.index', compact('students'));
     }
 
