@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="h-full bg-slate-50">
+<html lang="en" class="h-full bg-stone-50/50">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,15 +12,15 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: {
-                            50: '#eef2ff',
-                            100: '#e0e7ff',
-                            200: '#c7d2fe',
-                            500: '#6366f1',
-                            600: '#4f46e5',
-                            700: '#4338ca',
-                            800: '#3730a3',
-                            900: '#312e81',
+                        brand: {
+                            50: '#fff7ed',
+                            100: '#ffedd5',
+                            200: '#fed7aa',
+                            500: '#f97316',
+                            600: '#ea580c',
+                            700: '#c2410c',
+                            800: '#9a3412',
+                            900: '#7c2d12',
                         }
                     }
                 }
@@ -50,30 +50,33 @@
         }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col justify-between selection:bg-indigo-600 selection:text-white">
+<body class="bg-stone-50/50 text-stone-800 antialiased min-h-screen flex flex-col justify-between selection:bg-orange-600 selection:text-white">
+
+    <!-- Top Accent Bar -->
+    <div class="h-1 bg-gradient-to-r from-orange-500 via-amber-500 to-stone-900"></div>
 
     <!-- Header Navigation -->
-    <header class="border-b border-slate-200 bg-white sticky top-0 z-30 shadow-xs">
+    <header class="border-b border-stone-200 bg-white sticky top-0 z-30 shadow-xs">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-3">
                 <a href="{{ route('students.index') }}" class="flex items-center space-x-3 group">
-                    <div class="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center shadow-sm group-hover:scale-105 group-hover:bg-indigo-700 transition-all duration-200">
+                    <div class="w-9 h-9 rounded-xl bg-orange-600 text-white flex items-center justify-center shadow-sm group-hover:scale-105 group-hover:bg-orange-700 transition-all duration-200">
                         <i class="fa-solid fa-graduation-cap text-sm"></i>
                     </div>
                     <div>
-                        <span class="font-bold text-sm tracking-tight text-slate-900 block leading-tight group-hover:text-indigo-600 transition-colors">CIT Student Portal</span>
-                        <span class="text-[11px] text-slate-500 font-medium leading-none">ITST 302 Registry</span>
+                        <span class="font-bold text-sm tracking-tight text-stone-900 block leading-tight group-hover:text-orange-600 transition-colors">CCS Student Portal</span>
+                        <span class="text-[11px] text-stone-500 font-medium leading-none">ITST 302 Registry</span>
                     </div>
                 </a>
             </div>
             <nav class="flex items-center space-x-2 text-xs font-medium">
                 <a href="{{ route('students.index') }}"
-                   class="px-3.5 py-2 rounded-lg transition-all flex items-center space-x-1.5 {{ request()->routeIs('students.index') ? 'bg-slate-100 text-indigo-700 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
+                   class="px-3.5 py-2 rounded-lg transition-all flex items-center space-x-1.5 {{ request()->routeIs('students.index') ? 'bg-orange-50 text-orange-700 font-bold' : 'text-stone-600 hover:text-stone-900 hover:bg-stone-50' }}">
                     <i class="fa-solid fa-users text-[11px]"></i>
                     <span>Directory</span>
                 </a>
                 <a href="{{ route('students.create') }}"
-                   class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 active:scale-95 transition-all duration-150 font-bold shadow-xs hover:shadow flex items-center space-x-1.5">
+                   class="px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 active:scale-95 transition-all duration-150 font-bold shadow-xs hover:shadow flex items-center space-x-1.5">
                     <i class="fa-solid fa-user-plus text-[11px]"></i>
                     <span>Register Student</span>
                 </a>
@@ -105,14 +108,14 @@
     </main>
 
     <!-- Footer -->
-    <footer class="border-t border-slate-200 bg-white py-6 mt-12">
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-2">
+    <footer class="border-t border-stone-200 bg-white py-6 mt-12">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between text-xs text-stone-500 gap-2">
             <div class="flex items-center space-x-2">
-                <span class="font-medium text-slate-700">ITST 302 Client-Server Technologies</span>
+                <span class="font-medium text-stone-700">ITST 302 Client-Server Technologies</span>
                 <span>&bull;</span>
                 <span>Week 4 Laboratory Activity</span>
             </div>
-            <div>Mini Project 03: Student Registration System</div>
+            <div>Mini Project 03: Student Registration System (CCS)</div>
         </div>
     </footer>
 
