@@ -50,33 +50,6 @@ When a user registers a student, the request moves through several stages in Lar
 
 ![Laravel Request Lifecycle Diagram](screenshots/LRL-diagram.png)
 
-```text
-User (Browser)
-      |
-      v
- routes/web.php
-      |
-      v
-StudentController
-      |
-      v
- Validation ($request->validate)
-   /          \
-(Fails)     (Passes)
-  |             |
-  v             v
-Redirect Back  Laravel Storage (Upload Photo)
-with Errors     |
-                v
-               Student Model (Eloquent)
-                |
-                v
-               Database Table (students)
-                |
-                v
-               Redirect with Success Flash & Modal
-```
-
 ---
 
 ## 5. Validation Rules
@@ -105,28 +78,6 @@ The following validation rules are used in the application:
 
 ![Entity Relationship Diagram](screenshots/ERD-diagram.png)
 
-```text
-+---------------------------------------------------------+
-|                        STUDENTS                         |
-+---------------------------------------------------------+
-| id                  : BIGINT (Primary Key, Auto Inc)    |
-| student_id          : VARCHAR(50) (Unique)              |
-| first_name          : VARCHAR(100)                      |
-| middle_name         : VARCHAR(100) (Nullable)           |
-| last_name           : VARCHAR(100)                      |
-| email               : VARCHAR(150) (Unique)             |
-| mobile_number       : VARCHAR(20)                       |
-| gender              : VARCHAR(20)                       |
-| date_of_birth       : DATE                              |
-| program             : VARCHAR(100)                      |
-| year_level          : VARCHAR(50)                       |
-| address             : TEXT                              |
-| profile_picture     : VARCHAR(255)                      |
-| created_at          : TIMESTAMP                         |
-| updated_at          : TIMESTAMP                         |
-+---------------------------------------------------------+
-```
-
 ### Table Structure
 * Table Name: `students`
 * Primary Key: `id`
@@ -139,38 +90,6 @@ The following validation rules are used in the application:
 The flowchart below shows what happens when someone registers:
 
 ![Registration Flowchart Diagram](screenshots/registration-diagram.png)
-
-```text
-[Start: User Opens Registration Page]
-                 |
-                 v
-        [Fill in the Form]
-                 |
-                 v
-       [Select Profile Photo]
-                 |
-                 v
-      [Click Submit Button]
-                 |
-                 v
-       <Is Data Valid?>
-        /            \
-     (No)            (Yes)
-      |                |
-      v                v
-[Show Error      [Save Photo to Storage]
- Messages on           |
- Form Fields]          v
-      |          [Insert Record to Database]
-      |                |
-      |                v
-      |          [Set Success Flash Message]
-      |                |
-      +---------> [Display Submission Modal]
-                       |
-                       v
-                     [End]
-```
 
 ---
 
